@@ -22,4 +22,6 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
             "where u.id=:universityId", nativeQuery = true)
     List<Group> getGroupsByUniversityIdNative(Integer universityId);
 
+    boolean existsByNameAndFacultyId(String name, Integer faculty_id);
+
 }
