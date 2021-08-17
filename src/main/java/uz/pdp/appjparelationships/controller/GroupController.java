@@ -23,20 +23,23 @@ public class GroupController {
 //    CREATE
     @PostMapping
     public String addGroup(@RequestBody GroupDto groupDto){
+        boolean exists = groupRepository.existsByNameAndFacultyId(groupDto.getName(), groupDto.getFacultyId());
+
+        if (exists){
+            return "In this faculty this group exist";
+        }
         Optional<Faculty> optionalFaculty = facultyRepository.findById(groupDto.getFacultyId());
         if (!optionalFaculty.isPresent()){
-            return "Faculty is not found";
+            return "This faculys is not found";
         }
-        boolean exists = groupRepository.existsByNameAndFacultyId(groupDto.getName(), groupDto.getFacultyId());
-        if (exists){
-            return "This group is added to this faculty";
-        }
+
         Group group = new Group();
-        group.setFaculty(optionalFaculty.get());
         group.setName(groupDto.getName());
+        group.setFaculty(optionalFaculty.get());
         groupRepository.save(group);
         return "Group is added";
     }
+
 
     //READ
 
@@ -47,6 +50,7 @@ public class GroupController {
         return groups;
     }
 
+
     //UNIVERSITET MAS'UL XODIMI UCHUN
     @GetMapping("/byUniversityId/{universityId}")
     public List<Group> getGroupsByUniversityId(@PathVariable Integer universityId) {
@@ -55,6 +59,7 @@ public class GroupController {
         List<Group> groupsByUniversityIdNative = groupRepository.getGroupsByUniversityIdNative(universityId);
         return allByFaculty_universityId;
     }
+
 
     @GetMapping("/{id}")
     public Group getGroupById(@PathVariable Integer id){
@@ -65,38 +70,43 @@ public class GroupController {
         return optionalGroup.get();
     }
 
+
 //    UPDATE
     @PutMapping("/{id}")
-    public String egitGroupById(@PathVariable Integer id, @RequestBody GroupDto groupDto){
+    public String editGroup(@RequestBody GroupDto groupDto, @PathVariable Integer id) {
         Optional<Group> optionalGroup = groupRepository.findById(id);
-        if (!optionalGroup.isPresent()){
-            return "Group is not found";
+
+
+        boolean exists = groupRepository.existsByNameAndFacultyId(groupDto.getName(), groupDto.getFacultyId());
+
+        if (exists){
+            return "In this faculty this group exist";
         }
         Optional<Faculty> optionalFaculty = facultyRepository.findById(groupDto.getFacultyId());
         if (!optionalFaculty.isPresent()){
-            return "Faculty is not found";
+            return "This faculys is not found";
         }
-        boolean exists = groupRepository.existsByNameAndFacultyId(groupDto.getName(), groupDto.getFacultyId());
-        if (exists){
-            return "This group is added to this faculty";
-        }
-        Group group = optionalGroup.get();
-        group.setFaculty(optionalFaculty.get());
+
+        Group group = new Group();
         group.setName(groupDto.getName());
+        group.setFaculty(optionalFaculty.get());
         groupRepository.save(group);
-        return "Group is edited";
+        return "Group is added";
     }
 
 //    DELETE
     @DeleteMapping("/{id}")
-    public String deleteGroupById(@PathVariable Integer id){
+    public String deleteGroup(@PathVariable Integer id){
         try {
             groupRepository.deleteById(id);
             return "Group is deleted";
         }catch (Exception e){
-            return "Error";
+            return "Error in deleting";
         }
     }
+
+
+
 
 
 }

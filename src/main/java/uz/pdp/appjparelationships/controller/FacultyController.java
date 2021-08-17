@@ -20,6 +20,7 @@ public class FacultyController {
     @Autowired
     UniversityRepository universityRepository;
 
+    //    CREATE
     @PostMapping
     public String addFaculty(@RequestBody FacultyDto facultyDto) {
         boolean exists = facultyRepository.existsByNameAndUniversityId(facultyDto.getName(), facultyDto.getUniversityId());
@@ -35,6 +36,8 @@ public class FacultyController {
         return "Faculty saved";
     }
 
+
+    //    READ
     //VAZIRLIK UCHUN
     @GetMapping
     public List<Faculty> getFaculties() {
@@ -48,16 +51,8 @@ public class FacultyController {
         return allByUniversityId;
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteFaculty(@PathVariable Integer id) {
-        try {
-            facultyRepository.deleteById(id);
-            return "Faculty deleted";
-        } catch (Exception e) {
-            return "Error in deleting";
-        }
-    }
 
+//    UPDATE
     @PutMapping("/{id}")
     public String editFaculty(@PathVariable Integer id, @RequestBody FacultyDto facultyDto) {
         Optional<Faculty> optionalFaculty = facultyRepository.findById(id);
@@ -73,6 +68,17 @@ public class FacultyController {
             return "Faculty edited";
         }
         return "Faculty not found";
+    }
+
+//    DELETE
+    @DeleteMapping("/{id}")
+    public String deleteFaculty(@PathVariable Integer id) {
+        try {
+            facultyRepository.deleteById(id);
+            return "Faculty deleted";
+        } catch (Exception e) {
+            return "Error in deleting";
+        }
     }
 
 

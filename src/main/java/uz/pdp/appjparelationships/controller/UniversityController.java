@@ -19,14 +19,6 @@ public class UniversityController {
     AddressRepository addressRepository;
 
 
-    //READ
-    @RequestMapping(value = "/university", method = RequestMethod.GET)
-    public List<University> getUniversities() {
-        List<University> universityList = universityRepository.findAll();
-        return universityList;
-    }
-
-
     //CREATE
     @RequestMapping(value = "/university", method = RequestMethod.POST)
     public String addUniversity(@RequestBody UniversityDto universityDto) {
@@ -45,6 +37,13 @@ public class UniversityController {
         universityRepository.save(university);
 
         return "University added";
+    }
+
+    //READ
+    @RequestMapping(value = "/university", method = RequestMethod.GET)
+    public List<University> getUniversities() {
+        List<University> universityList = universityRepository.findAll();
+        return universityList;
     }
 
     //UPDATE
@@ -67,7 +66,6 @@ public class UniversityController {
         }
         return "University not found";
     }
-
 
     //DELETE
     @RequestMapping(value = "/university/{id}",method = RequestMethod.DELETE)

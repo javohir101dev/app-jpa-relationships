@@ -24,4 +24,5 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
 
     boolean existsByNameAndFacultyId(String name, Integer faculty_id);
 
+
 }
